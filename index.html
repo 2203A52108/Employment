@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Management System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body ng-app="employeeApp" ng-controller="employeeController">
+  <div class="container">
+    <h1>Employee Management System</h1>
+
+    <!-- Login / Signup Form -->
+    <div ng-if="!isLoggedIn">
+      <form ng-submit="login()">
+        <h2>Login</h2>
+        <label>Username</label>
+        <input type="text" ng-model="user.username" required>
+        <label>Password</label>
+        <input type="password" ng-model="user.password" required>
+        <label>Role</label>
+        <select ng-model="user.role" required>
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+        </select>
+        <button type="submit">Login</button>
+      </form>
+      <hr>
+      <form ng-submit="signup()">
+        <h2>Sign Up</h2>
+        <label>Username</label>
+        <input type="text" ng-model="newUser.username" required>
+        <label>Password</label>
+        <input type="password" ng-model="newUser.password" required>
+        <label>Role</label>
+        <select ng-model="newUser.role" required>
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+        </select>
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+
+    <!-- Employee List -->
+    <div ng-if="isLoggedIn">
+      <h2>Employee List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Salary</th>
+            <th ng-if="isAdmin">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="employee in employees">
+            <td>{{employee.id}}</td>
+            <td>{{employee.name}}</td>
+            <td>{{employee.position}}</td>
+            <td>{{employee.salary}}</td>
+            <td ng-if="isAdmin">
+              <button ng-click="editEmployee(employee)">Edit</button>
+              <button ng-click="deleteEmployee(employee)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button ng-if="isAdmin" ng-click="addEmployeeForm()">Add Employee</button>
+      <div ng-if="showAddEmployee">
+        <h3>Add Employee</h3>
+        <form ng-submit="addEmployee()">
+          <label>ID</label>
+          <input type="number" ng-model="newEmployee.id" required>
+          <label>Name</label>
+          <input type="text" ng-model="newEmployee.name" required>
+          <label>Position</label>
+          <input type="text" ng-model="newEmployee.position" required>
+          <label>Salary</label>
+          <input type="number" ng-model="newEmployee.salary" required>
+          <button type="submit">Add</button>
+        </form>
+      </div>
+
+      <!-- Edit Employee Form -->
+      <div ng-if="showEditEmployee">
+        <h3>Edit Employee</h3>
+        <form ng-submit="updateEmployee()">
+          <label>ID</label>
+          <input type="number" ng-model="currentEmployee.id" readonly>
+          <label>Name</label>
+          <input type="text" ng-model="currentEmployee.name" required>
+          <label>Position</label>
+          <input type="text" ng-model="currentEmployee.position" required>
+          <label>Salary</label>
+          <input type="number" ng-model="currentEmployee.salary" required>
+          <button type="submit">Update</button>
+          <button type="button" ng-click="cancelEdit()">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
